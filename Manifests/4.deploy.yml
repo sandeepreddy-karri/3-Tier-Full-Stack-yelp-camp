@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yelp-camp-deployment
+  namespace: webapps # Added this since your previous command used -n webapps
 spec:
   replicas: 3
   selector:
@@ -20,18 +21,15 @@ spec:
               labelSelector:
                 matchLabels:
                   app: yelp-camp
-                  topologyKey: kubernetes.io/hostname
-
+              topologyKey: kubernetes.io/hostname # Fixed: Moved out of matchLabels alignment
       containers:
         - name: yelp-camp-container
           image: shaikmustafa/finalcamp:v1
           ports:
             - containerPort: 3000
-
           envFrom:
             - secretRef:
                 name: yelp-camp-secrets
-
           resources:
             requests:
               cpu: "200m"
@@ -39,7 +37,6 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
-
           readinessProbe:
             httpGet:
               path: /
@@ -47,7 +44,6 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 10
             timeoutSeconds: 5
-
           livenessProbe:
             httpGet:
               path: /
