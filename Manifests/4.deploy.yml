@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yelp-camp-deployment
-  namespace: webapps # Added this since your previous command used -n webapps
 spec:
   replicas: 3
   selector:
